@@ -1,0 +1,23 @@
+
+label{
+    color: white;
+}
+
+#answer{
+    height:150px;
+    width: 1200px;
+    background-color: #b9baba;
+
+}
+#question{
+    height: 50px;
+    width:1200px;
+    background-color: #b9baba;
+}
+form{
+    padding: 20px;
+}
+#type {
+ width:150px;
+ background-color: #b9baba;
+}

@@ -1,0 +1,10 @@
+[
+    {
+        "question":"About Angular",
+        "answer":"Angular is an Javascript binding framework. it binds view and data. it makes developer job easier by providing features like SPA, Dependecy injection, Routing , State Management, Rxjs, Http."
+    },
+    {
+        "question":"",
+        "answer":""
+    }
+]

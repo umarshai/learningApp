@@ -1,0 +1,50 @@
+
+
+
+
+<div *ngIf="update">
+    <h3>UPDATE</h3>
+	<form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+		<h3 style="color:#b9baba;">{{type}} </h3>
+		<div>
+		  <label for="Question">
+			Question
+		  </label>
+		  <textarea id="question"  class ="form-control" type="text" formControlName="question"></textarea>
+		</div>
+	  
+		<div>
+		  <label for="answer">
+			Answer
+		  </label>
+		  <textarea id="answer" class ="form-control" type="text" formControlName="answer" height="100"></textarea>
+		</div>
+		<br>
+
+		<button class="btn btn-success" type="submit">UPDATE</button>
+		&nbsp;&nbsp;
+		<button class="btn btn-danger" (click)="closeForm()">Close</button>
+
+	  
+	  </form>
+
+</div>
+
+
+
+
+<div class="bank">
+    <ngb-accordion #acc="ngbAccordion" >
+        <ngb-panel *ngFor="let bank of ibank, let i=index">
+            <ng-template ngbPanelTitle>
+                <span><b>{{i+1}}.{{bank.question}}
+                    <button type="button" class="btn btn-info" (click)="updateData(bank,bank.id)">Update</button>&nbsp;&nbsp;
+                    <button type="button" class="btn btn-danger" (click)="del(bank.id)">Del</button>
+                </b></span>
+            </ng-template>
+            <ng-template ngbPanelContent class="answer">
+            {{bank.answer}}
+            </ng-template>
+        </ngb-panel>
+    </ngb-accordion>
+</div>

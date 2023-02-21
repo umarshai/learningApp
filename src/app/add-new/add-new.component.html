@@ -1,0 +1,31 @@
+
+<button type="button" class="btn btn-primary" (click)="addNew()">
+	Add New
+</button>
+
+<div *ngIf="addNewButton">
+	<form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+		<h3 style="color:#b9baba;">{{type}} </h3>
+		<div>
+		  <label for="Question">
+			Question
+		  </label>
+		  <textarea id="question"  class ="form-control" type="text" formControlName="question"></textarea>
+		</div>
+	  
+		<div>
+		  <label for="answer">
+			Answer
+		  </label>
+		  <textarea id="answer" class ="form-control" type="text" formControlName="answer" height="100"></textarea>
+		</div>
+		<br>
+
+		<button class="btn btn-success" type="submit">Save</button>
+		&nbsp;&nbsp;
+		<button class="btn btn-danger" (click)="closeForm()">Close</button>
+
+	  
+	  </form>
+
+</div>
