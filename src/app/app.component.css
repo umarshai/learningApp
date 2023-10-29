@@ -1,5 +1,15 @@
 .pageTop
 {
-    height: 80px;
-    background-image: url(../assets/universe-1566159_1280.webp);
+    height: 50px;
+    /* background-image: url(../assets/universe-1566159_1280.webp); */
+}
+
+
+.nav{
+    --bs-nav-link-color: #b9baba;
+}
+
+.nav-tabs{
+    background-color: #222546;
+    border-color: #222546;
 }

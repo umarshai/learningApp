@@ -1,7 +1,7 @@
 .bank{
-    padding: 37px;
-    width: 1290px;
-    white-space: pre;
+    max-width: 90%;
+    margin: auto;
+    white-space: pre-wrap;
 }
 .accordion{
     --bs-accordion-bg: #22252B;
@@ -13,6 +13,11 @@
     --bs-accordion-active-bg:#22252B;
 
 }
+
+.update-container{
+    max-width: 50%;
+}
+
 .nav-tabs .nav {
     --bs-nav-link-padding-left: 100px;
     --bs-link-color: #b9baba;
@@ -43,4 +48,5 @@ form{
  width:150px;
  background-color: #b9baba;
 }
+
 

@@ -16,6 +16,7 @@ import { AddNewComponent } from './add-new/add-new.component';
 import { HtmlComponent } from './html/html.component';
 import { CssComponent } from './css/css.component';
 import { BootstrapComponent } from './bootstrap/bootstrap.component';
+import { NotesComponent } from './notes/notes.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +27,8 @@ import { BootstrapComponent } from './bootstrap/bootstrap.component';
     AddNewComponent,
     HtmlComponent,
     CssComponent,
-    BootstrapComponent
+    BootstrapComponent,
+    NotesComponent
   ],
   imports: [
     BrowserModule,

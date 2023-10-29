@@ -6,6 +6,7 @@ import { CssComponent } from './css/css.component';
 import { HomeComponent } from './home/home.component';
 import { HtmlComponent } from './html/html.component';
 import { JavascriptComponent } from './javascript/javascript.component';
+import { NotesComponent } from './notes/notes.component';
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -14,6 +15,7 @@ const routes: Routes = [
   {path: 'html', component: HtmlComponent},
   {path: 'css', component: CssComponent},
   {path: 'bootstrap', component: BootstrapComponent},
+  {path: 'notes', component: NotesComponent},
   {path: '', redirectTo:'home', pathMatch:"full"},
   {path: '**', component: HomeComponent},
 

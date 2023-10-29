@@ -24,7 +24,8 @@
     "suppressImplicitAnyIndexErrors": false,
     "useDefineForClassFields": false,
     "types": [
-      "@angular/localize"
+      "@angular/localize",
+      "jasmine"
     ],
     "lib": [
       "ES2022",

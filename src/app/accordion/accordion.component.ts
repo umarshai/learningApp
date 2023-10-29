@@ -19,15 +19,16 @@ export class AccordionComponent {
   update=false;
   uData='';
   id='';
+ 
+  crudeOn  = false;
   @Input() ibank: any;
   @Output()
   change = new EventEmitter();
   del(id){
-
-    console.log(id)
     this.dbDervice.deleteData(id).subscribe();
     this.change.emit("true");
   }
+
   updateData(value,id){
     this.id = id;
     this.checkoutForm.controls.question.setValue(value.question);
@@ -35,6 +36,10 @@ export class AccordionComponent {
     this.checkoutForm.controls.type.setValue(value.type);
     this.update=true;
 
+  }
+
+  btn(event){
+    this.crudeOn=event.target.checked;
   }
   closeForm(){
     this.update=false;
