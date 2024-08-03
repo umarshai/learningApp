@@ -1,11 +1,13 @@
-
+<h1 style="margin-left: 63px; margin-bottom: 20px; color: #b9baba;" >{{type}}</h1>
 <button type="button" class="btn btn-primary" style="margin-left: 63px; margin-bottom: 20px;" (click)="addNew()">
 	Add New
 </button>
-
-<div *ngIf="addNewButton">
+<div style="margin-left: 63px; margin-bottom: 20px;" *ngIf="addNewButton">
+	<div *ngIf="route==='home'">
+		<input type="text" [(ngModel)]="customType">
+	</div>
 	<form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
-		<h3 style="color:#b9baba;">{{type}} </h3>
+		<h5 style="color:#b9baba;">{{type}} </h5>
 		<div>
 		  <label for="Question">
 			Question

@@ -5,29 +5,11 @@
 
 <ul ngbNav #nav="ngbNav" class="nav-tabs">
 	<bi name="app" style="color: green; width:40px;"></bi>&nbsp;&nbsp;
-	<li [ngbNavItem]="1">
-		<a ngbNavLink [routerLink] ="['home']"><b>Home</b></a>
-	</li>
-	<li [ngbNavItem]="2">
-		<a ngbNavLink [routerLink] ="['angular']"> <b>Angular</b> </a>
-	</li>
-	<li [ngbNavItem]="3">
-		<a ngbNavLink [routerLink] ="['javascript']"><b>JavaScript</b></a>
-	</li>
-  <li [ngbNavItem]="4">
-		<a ngbNavLink [routerLink] ="['html']"><b>HTML</b></a>
-	</li>
-	<li [ngbNavItem]="5">
-		<a ngbNavLink [routerLink] ="['css']"><b>CSS</b></a>
-	</li>
-	<li [ngbNavItem]="6">
-		<a ngbNavLink [routerLink] ="['bootstrap']"><b>Bootstrap</b></a>
-	</li>
-	<li [ngbNavItem]="7">
-		<a ngbNavLink [routerLink] ="['notes']"><b>Notes</b></a>
+	<li *ngFor="let route of routes; let i index" [ngbNavItem]="i">
+		<a ngbNavLink [routerLink] ="[route.label]"><b>{{route.path}}</b></a>
 	</li>
 </ul>
-<br>
+<br> 
 <br>
 
 
