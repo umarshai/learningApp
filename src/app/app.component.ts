@@ -12,7 +12,7 @@ export class AppComponent   {
     this.getNew();
   }
   routes;
- savedDate;
+  savedDate;
   title = 'LearningApp';
   getNew(){ 
     this.dbService.getData()
