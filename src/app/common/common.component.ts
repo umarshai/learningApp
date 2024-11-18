@@ -34,12 +34,10 @@ export class CommonComponent {
       {
         array.push({ ...response[key] , id:key});   
       } 
-    }  
-    array=array.filter((demo)=>{ return demo.type== route });
+    }     
     const cDate= array.filter((demo)=>{ return (demo.type== 'home' && demo.question == 'targetDate')});
-
+    array=array.filter((demo)=>{ return demo.type== route });
     this.updateCountdown(cDate[0].answer);
-
     return array;
   }
   ))
