@@ -16,65 +16,102 @@ export class ExpenseComponent implements OnInit {
   filterCustomStart = '';
   filterCustomEnd = '';
   showForm = false;
-  editIndex: number|null = null;
+  editIndex: string|null = null;
   form: Expense = { amount: 0, description: '', date: '', tags: [], category: '' };
   newTag = '';
   newCategory = '';
   showTagModal = false;
   showCategoryModal = false;
   selectedTag = '';
+  selectedTagForDelete = '';
+  selectedCategoryForDelete = '';
 
   constructor(private expenseService: ExpenseService) {}
-
-
 
   ngOnInit() {
     this.load();
   }
 
   load() {
-    this.expenses = this.expenseService.getAll();
-    this.tags = this.expenseService.getTags();
-    this.categories = this.expenseService.getCategories();
+    this.expenseService.getAll().subscribe((data: any) => {
+      this.expenses = [];
+      if (data) {
+        Object.keys(data).forEach(key => {
+          if (data[key].type === 'expense') {
+            this.expenses.push({ ...data[key], id: key });
+          }
+        });
+      }
+    });
+    this.expenseService.getTags().subscribe((data: any) => {
+      this.tags = [];
+      if (data) {
+        Object.keys(data).forEach(key => {
+          if (data[key].type === 'tag') {
+            this.tags.push(data[key].value);
+          }
+        });
+      }
+    });
+    this.expenseService.getCategories().subscribe((data: any) => {
+      this.categories = [];
+      if (data) {
+        Object.keys(data).forEach(key => {
+          if (data[key].type === 'category') {
+            this.categories.push(data[key].value);
+          }
+        });
+      }
+    });
   }
 
   save() {
     if (this.editIndex !== null) {
-      this.expenseService.update(this.editIndex, this.form);
+      this.expenseService.update(this.editIndex, this.form).subscribe(() => {
+        this.cancel();
+        this.load();
+      });
     } else {
-      this.expenseService.add(this.form);
+      this.expenseService.add(this.form).subscribe(() => {
+        this.cancel();
+        this.load();
+      });
     }
-    this.cancel();
-    this.load();
   }
 
   edit(i: number) {
-    this.editIndex = i;
-    // Deep copy tags array to avoid mutating the original
-    this.form = { ...this.expenses[i], tags: [...(this.expenses[i].tags || [])] };
+    const expense = this.expenses[i];
+    this.editIndex = expense.id || null;
+    this.form = { ...expense, tags: [...(expense.tags || [])] };
     this.showForm = true;
   }
 
   delete(i: number) {
-    this.expenseService.delete(i);
-    this.load();
+    const expense = this.expenses[i];
+    if (expense.id) {
+      this.expenseService.delete(expense.id).subscribe(() => {
+        this.load();
+      });
+    }
   }
 
   addTag() {
     if (this.newTag.trim()) {
-      this.expenseService.addTag(this.newTag.trim());
-      this.newTag = '';
-      this.load();
-      this.closeTagModal();
+      this.expenseService.addTag(this.newTag.trim()).subscribe(() => {
+        this.newTag = '';
+        this.load();
+        this.closeTagModal();
+      });
     }
   }
 
   addCategory() {
     if (this.newCategory.trim()) {
-      this.expenseService.addCategory(this.newCategory.trim());
-      this.newCategory = '';
-      this.load();
-      this.closeCategoryModal();
+      this.expenseService.addCategory(this.newCategory.trim()).subscribe(() => {
+        this.newCategory = '';
+        this.load();
+        this.closeCategoryModal();
+      });
     }
   }
 
@@ -94,7 +131,7 @@ export class ExpenseComponent implements OnInit {
   cancel() {
     this.showForm = false;
     this.editIndex = null;
-  this.form = { amount: 0, description: '', date: '', tags: [], category: '' };
+    this.form = { amount: 0, description: '', date: '', tags: [], category: '' };
   }
 
   openTagModal() {
@@ -113,17 +150,26 @@ export class ExpenseComponent implements OnInit {
   }
 
   deleteTag(tag: string): void {
-    if (tag && tag.trim().length > 0) {
-      this.expenseService.deleteTag(tag);
-      this.load();
-    }
+    // Find the Firebase key for this tag
+    this.expenseService.getTags().subscribe((data: any) => {
+      if (data) {
+        const key = Object.keys(data).find(k => data[k].type === 'tag' && data[k].value === tag);
+        if (key) {
+          this.expenseService.deleteTag(key).subscribe(() => this.load());
+        }
+      }
+    });
   }
 
   deleteCategory(category: string): void {
-    if (category && category.trim().length > 0) {
-      this.expenseService.deleteCategory(category);
-      this.load();
-    }
+    this.expenseService.getCategories().subscribe((data: any) => {
+      if (data) {
+        const key = Object.keys(data).find(k => data[k].type === 'category' && data[k].value === category);
+        if (key) {
+          this.expenseService.deleteCategory(key).subscribe(() => this.load());
+        }
+      }
+    });
   }
 
   addTagToExpense() {

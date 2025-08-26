@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { DbService } from '../service/db.service';
+import { Observable } from 'rxjs';
 
 export interface Expense {
   amount: number;
@@ -6,85 +8,53 @@ export interface Expense {
   date: string;
   tags: string[];
   category: string;
+  id?: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class ExpenseService {
-  private key = 'expenses';
-  private tagKey = 'expenseTags';
-  private categoryKey = 'expenseCategories';
+  constructor(private db: DbService) {}
 
-  getAll(): Expense[] {
-    return JSON.parse(localStorage.getItem(this.key) || '[]');
+  // Expenses CRUD
+  getAll(): Observable<any> {
+    return this.db.getData(); // filter in component for type: 'expense'
   }
 
-
-  add(expense: Expense) {
-    const expenses = this.getAll();
-    // Ensure tags is always an array
-    if (!Array.isArray(expense.tags)) {
-      expense.tags = expense.tags ? [expense.tags] : [];
-    }
-    expenses.push(expense);
-    localStorage.setItem(this.key, JSON.stringify(expenses));
+  add(expense: Expense): Observable<any> {
+    return this.db.addNew({ ...expense, type: 'expense' });
   }
 
-
-  update(index: number, expense: Expense) {
-    const expenses = this.getAll();
-    if (!Array.isArray(expense.tags)) {
-      expense.tags = expense.tags ? [expense.tags] : [];
-    }
-    expenses[index] = expense;
-    localStorage.setItem(this.key, JSON.stringify(expenses));
+  update(id: string, expense: Expense): Observable<any> {
+    return this.db.updateData(id, { ...expense, type: 'expense' });
   }
 
-  deleteTag(tag: string): void {
-    const tags: string[] = this.getTags() || [];
-    const updatedTags: string[] = tags.filter((t: string) => t !== tag);
-    localStorage.setItem(this.tagKey, JSON.stringify(updatedTags));
+  delete(id: string): Observable<any> {
+    return this.db.deleteData(id);
   }
 
-  deleteCategory(category: string): void {
-    const categories: string[] = this.getCategories() || [];
-    const updatedCategories: string[] = categories.filter((c: string) => c !== category);
-    localStorage.setItem(this.categoryKey, JSON.stringify(updatedCategories));
+  // Tags CRUD
+  getTags(): Observable<any> {
+    return this.db.getData(); // filter in component for type: 'tag'
   }
 
-  delete(index: number) {
-    const expenses = this.getAll();
-    expenses.splice(index, 1);
-    localStorage.setItem(this.key, JSON.stringify(expenses));
+  addTag(tag: string): Observable<any> {
+    return this.db.addNew({ value: tag, type: 'tag' });
   }
 
-  getTags(): string[] {
-    return JSON.parse(localStorage.getItem(this.tagKey) || '["food","family","personal","credit card","snacks","avoidable expense"]');
+  deleteTag(id: string): Observable<any> {
+    return this.db.deleteData(id);
   }
 
-  addTag(tag: string) {
-    const tags = this.getTags();
-    if (!tags.includes(tag)) {
-      tags.push(tag);
-      localStorage.setItem(this.tagKey, JSON.stringify(tags));
-    }
+  // Categories CRUD
+  getCategories(): Observable<any> {
+    return this.db.getData(); // filter in component for type: 'category'
   }
 
-  getCategories(): string[] {
-    // Add some known categories if none exist
-    const defaultCategories = ["Food", "Transport", "Shopping", "Bills", "Health", "Entertainment", "Family", "Personal", "Credit Card", "Snacks", "Avoidable Expense"];
-    const stored = JSON.parse(localStorage.getItem(this.categoryKey) || 'null');
-    if (!stored || !Array.isArray(stored) || stored.length === 0) {
-      localStorage.setItem(this.categoryKey, JSON.stringify(defaultCategories));
-      return defaultCategories;
-    }
-    return stored;
+  addCategory(category: string): Observable<any> {
+    return this.db.addNew({ value: category, type: 'category' });
   }
 
-  addCategory(category: string) {
-    const categories = this.getCategories();
-    if (!categories.includes(category)) {
-      categories.push(category);
-      localStorage.setItem(this.categoryKey, JSON.stringify(categories));
-    }
+  deleteCategory(id: string): Observable<any> {
+    return this.db.deleteData(id);
   }
 }
