@@ -29,10 +29,11 @@
       <input *ngIf="filterDateType==='custom'" type="date" [(ngModel)]="filterCustomStart" class="form-control">
       <input *ngIf="filterDateType==='custom'" type="date" [(ngModel)]="filterCustomEnd" class="form-control">
     </div>
-    <div class="expense-summary-card" style="flex: 1 1 180px; min-width: 160px; background: #f8f9fa; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
-      <div style="font-size: 1.1em;">Total</div>
-      <div style="font-size: 1.3em; font-weight: bold; color: #28a745;">{{total | currency:'INR':'symbol'}}</div>
-      <div style="font-size: 0.95em; color: #888;">({{filteredExpenses.length}} items)</div>
+    <div class="expense-summary-card" style="flex: 1 1 180px; min-width: 160px; background: #171717; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
+      <div style="display: flex; align-items: center; gap: 0.5em; justify-content: center; font-size: 1em; padding: 0.25em 0.75em; background: #171717; border-radius: 6px; min-width: unset; min-height: unset; box-shadow: none;">
+        <span style="color: #fafafa;">Total</span>
+        <span style="font-weight: bold; color: #28a745; font-size: 1.1em;">{{total | currency:'INR':'symbol'}}</span>
+      </div>
     </div>
   </div>
 
