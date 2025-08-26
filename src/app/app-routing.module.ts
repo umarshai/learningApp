@@ -6,11 +6,11 @@ import { ExpenseComponent } from './expense/expense.component';
 import { GoalsComponent } from './goals/goals.component';
 
 const routes: Routes = [
-  { path: 'home', component: CommonComponent },
+  // { path: 'home', component: CommonComponent },
   { path: 'expense', component: ExpenseComponent },
   { path: 'goals', component: GoalsComponent },
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: '**', component: CommonComponent },
+  { path: '', redirectTo: 'expense', pathMatch: 'full' },
+  { path: '**', component: ExpenseComponent },
 ];
 
 @NgModule({

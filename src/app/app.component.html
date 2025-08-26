@@ -1,25 +1,15 @@
-<div class="pageTop">
-</div>
-
-<ul ngbNav #nav="ngbNav" class="nav-tabs">
-	<bi name="app" style="color: green; width:40px;"></bi>&nbsp;&nbsp;
-	<li *ngFor="let route of routes; let i = index" [ngbNavItem]="i">
-		<a ngbNavLink [routerLink] ="[route.label]"><b>{{route.path}}</b></a>
-	</li>
-	<li [ngbNavItem]="routes?.length || 0">
-		<a ngbNavLink routerLink="/expense"><b>Expense</b></a>
-	</li>
-	<li [ngbNavItem]="(routes?.length || 0) + 1">
-		<a ngbNavLink routerLink="/goals"><b>Goals</b></a>
-	</li>
-</ul>
-<br> 
-<br>
-
-
-
-
-
+<nav class="navbar navbar-expand-lg navbar-light bg-none" style="padding: 0;">
+  <div class="container-fluid justify-content-center">
+    <ul ngbNav #nav="ngbNav" class="nav nav-tabs justify-content-center w-100" style="gap: 1rem;">
+      <li [ngbNavItem]="0" class="nav-item">
+        <a ngbNavLink routerLink="/expense" class="nav-link"><b>Expense</b></a>
+      </li>
+      <li [ngbNavItem]="1" class="nav-item">
+        <a ngbNavLink routerLink="/goals" class="nav-link"><b>Goals</b></a>
+      </li>
+    </ul>
+  </div>
+</nav>
 <router-outlet></router-outlet>
 
 
