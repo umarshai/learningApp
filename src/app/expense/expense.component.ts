@@ -7,19 +7,24 @@ import { ExpenseService, Expense } from './expense.service';
   styleUrls: ['./expense.component.css']
 })
 export class ExpenseComponent implements OnInit {
+  get allTotal() {
+    return this.expenses.reduce((sum, e) => sum + Number(e.amount), 0);
+  }
   clearFilters() {
     this.filterTag = '';
     this.filterCategory = '';
-    this.filterDateType = 'all';
+    this.filterDateType = 'daily';
     this.filterCustomStart = '';
     this.filterCustomEnd = '';
+    this.filterSingleDate = '';
   }
   expenses: Expense[] = [];
   tags: string[] = [];
   categories: string[] = [];
   filterTag = '';
   filterCategory = '';
-  filterDateType = 'all';
+  filterDateType = 'daily';
+  filterSingleDate = '';
   filterCustomStart = '';
   filterCustomEnd = '';
   showForm = false;
@@ -48,6 +53,8 @@ export class ExpenseComponent implements OnInit {
             this.expenses.push({ ...data[key], id: key });
           }
         });
+        // Sort by date descending (recent first)
+        this.expenses.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
       }
     });
     this.expenseService.getTags().subscribe((data: any) => {
@@ -202,24 +209,41 @@ export class ExpenseComponent implements OnInit {
       if (this.filterDateType === 'daily') {
         start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         end = new Date(start); end.setDate(end.getDate() + 1);
+        filtered = filtered.filter(e => {
+          const d = new Date(e.date);
+          return d >= start && d < end;
+        });
+      } else if (this.filterDateType === 'single' && this.filterSingleDate) {
+        start = new Date(this.filterSingleDate);
+        end = new Date(start); end.setDate(end.getDate() + 1);
+        filtered = filtered.filter(e => {
+          const d = new Date(e.date);
+          return d >= start && d < end;
+        });
       } else if (this.filterDateType === 'weekly') {
         start = new Date(now);
         start.setDate(now.getDate() - now.getDay());
         end = new Date(start); end.setDate(end.getDate() + 7);
+        filtered = filtered.filter(e => {
+          const d = new Date(e.date);
+          return d >= start && d < end;
+        });
       } else if (this.filterDateType === 'monthly') {
         start = new Date(now.getFullYear(), now.getMonth(), 1);
         end = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+        filtered = filtered.filter(e => {
+          const d = new Date(e.date);
+          return d >= start && d < end;
+        });
       } else if (this.filterDateType === 'custom' && this.filterCustomStart && this.filterCustomEnd) {
         start = new Date(this.filterCustomStart);
         end = new Date(this.filterCustomEnd);
         end.setDate(end.getDate() + 1);
-      } else {
-        return filtered;
+        filtered = filtered.filter(e => {
+          const d = new Date(e.date);
+          return d >= start && d < end;
+        });
       }
-      filtered = filtered.filter(e => {
-        const d = new Date(e.date);
-        return d >= start && d < end;
-      });
     }
     return filtered;
   }

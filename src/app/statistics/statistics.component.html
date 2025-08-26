@@ -1,0 +1,38 @@
+<div class="statistics-container">
+  <h4>Expense Statistics</h4>
+  <div class="statistics-filters" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end; margin-bottom: 1rem;">
+    <select [(ngModel)]="filterTag" (ngModelChange)="updateCharts()" class="form-control">
+      <option value="">All Tags</option>
+      <option *ngFor="let tag of tags" [value]="tag">{{tag}}</option>
+    </select>
+    <select [(ngModel)]="filterCategory" (ngModelChange)="updateCharts()" class="form-control">
+      <option value="">All Categories</option>
+      <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+    </select>
+    <select [(ngModel)]="filterDateType" (ngModelChange)="updateCharts()" class="form-control">
+      <option value="all">All Dates</option>
+      <option value="daily">Today</option>
+      <option value="single">Select Date</option>
+      <option value="weekly">This Week</option>
+      <option value="monthly">This Month</option>
+      <option value="custom">Custom Range</option>
+    </select>
+    <input *ngIf="filterDateType==='custom'" type="date" [(ngModel)]="filterCustomStart" (ngModelChange)="updateCharts()" class="form-control">
+    <input *ngIf="filterDateType==='custom'" type="date" [(ngModel)]="filterCustomEnd" (ngModelChange)="updateCharts()" class="form-control">
+    <input *ngIf="filterDateType==='single'" type="date" [(ngModel)]="filterSingleDate" (ngModelChange)="updateCharts()" class="form-control">
+  </div>
+  <div class="statistics-charts">
+    <canvas baseChart
+      [data]="categoryChartData"
+      [labels]="categoryChartLabels"
+      [type]="'pie'"
+      [options]="chartOptions">
+    </canvas>
+    <canvas baseChart
+      [data]="tagChartData"
+      [labels]="tagChartLabels"
+      [type]="'pie'"
+      [options]="chartOptions">
+    </canvas>
+  </div>
+</div>

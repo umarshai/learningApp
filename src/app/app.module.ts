@@ -13,6 +13,8 @@ import { AddNewComponent } from './add-new/add-new.component';
 import { CommonComponent } from './common/common.component';
 import { ExpenseComponent } from './expense/expense.component';
 import { GoalsComponent } from './goals/goals.component';
+import { StatisticsModule } from './statistics/statistics.module';
+import { NgChartsModule } from 'ng2-charts';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,7 +32,9 @@ import { GoalsComponent } from './goals/goals.component';
     ReactiveFormsModule,
     HttpClientModule,   
     NgbNavModule,
-    FormsModule
+    FormsModule,
+    StatisticsModule,
+    NgChartsModule
  ],
   providers: [],
   bootstrap: [AppComponent]
