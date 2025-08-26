@@ -1,0 +1,153 @@
+<div class="expense-container">
+
+  <div class="expense-header">
+    <div>
+      <button class="btn btn-primary mr-2" (click)="startAdd()">Add Expense</button> 
+      <button class="btn btn-outline-info mx-2" (click)="openTagModal()">Tags</button> 
+      <button class="btn btn-outline-success" (click)="openCategoryModal()">Categories</button>
+    </div>
+  </div>
+
+  <!-- Tag Modal -->
+  <div class="modal-backdrop" *ngIf="showTagModal" (click)="closeTagModal()"></div>
+  <div class="modal-custom" *ngIf="showTagModal">
+    <div class="modal-content-custom">
+      <h5>Tags</h5>
+      <div class="mb-2">
+        <div class="input-group">
+          <select class="form-control" [(ngModel)]="selectedTagForDelete">
+            <option *ngFor="let tag of tags" [value]="tag">{{tag}}</option>
+          </select>
+          <div class="input-group-append">
+            <button type="button" class="btn btn-danger" (click)="deleteTag(selectedTagForDelete)" [disabled]="!selectedTagForDelete">Delete</button>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <input type="text" [(ngModel)]="newTag" placeholder="+ New Tag" class="form-control" (keyup.enter)="addTag()">
+        <button type="button" class="btn btn-primary ml-2" (click)="addTag()">Add</button>
+      </div>
+      <button class="btn btn-secondary mt-2" (click)="closeTagModal()">Close</button>
+    </div>
+  </div>
+
+  <!-- Category Modal -->
+  <div class="modal-backdrop" *ngIf="showCategoryModal" (click)="closeCategoryModal()"></div>
+  <div class="modal-custom" *ngIf="showCategoryModal">
+    <div class="modal-content-custom">
+      <h5>Categories</h5>
+      <div class="mb-2">
+        <div class="input-group">
+          <select class="form-control" [(ngModel)]="selectedCategoryForDelete">
+            <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+          </select>
+          <div class="input-group-append">
+            <button type="button" class="btn btn-danger" (click)="deleteCategory(selectedCategoryForDelete)" [disabled]="!selectedCategoryForDelete">Delete</button>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <input type="text" [(ngModel)]="newCategory" placeholder="+ New Category" class="form-control" (keyup.enter)="addCategory()">
+        <button type="button" class="btn btn-success ml-2" (click)="addCategory()">Add</button>
+      </div>
+      <button class="btn btn-secondary mt-2" (click)="closeCategoryModal()">Close</button>
+    </div>
+  </div>
+
+  <!-- Add/Edit Form -->
+  <!-- Add/Edit Expense Modal -->
+  <div class="modal-backdrop" *ngIf="showForm" (click)="cancel()"></div>
+  <div class="modal-custom" *ngIf="showForm">
+    <div class="modal-content-custom">
+      <h5>{{editIndex !== null ? 'Edit' : 'Add'}} Expense</h5>
+      <form (ngSubmit)="save()" autocomplete="off">
+        <div class="form-row">
+          <input type="number" [(ngModel)]="form.amount" name="amount" placeholder="Amount in Rs" required class="form-control" min="0.01" step="0.01">
+          <input type="date" [(ngModel)]="form.date" name="date" required class="form-control">
+        </div>
+        <div class="form-row">
+          <input type="text" [(ngModel)]="form.description" name="description" placeholder="Description" class="form-control">
+        </div>
+        <div class="form-row">
+          <select [(ngModel)]="form.category" name="category" class="form-control">
+            <option value="">Select Category</option>
+            <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+          </select>
+          <div style="display: flex; gap: 0.5rem; align-items: center; width: 100%;">
+            <select [(ngModel)]="selectedTag" name="selectedTag" class="form-control" style="flex: 1 1 auto;">
+              <option value="">Select Tag</option>
+              <option *ngFor="let tag of tags" [value]="tag">{{tag}}</option>
+            </select>
+            <button type="button" class="btn btn-info" (click)="addTagToExpense()" [disabled]="!selectedTag || form.tags.includes(selectedTag)">Add Tag</button>
+          </div>
+          <div style="margin-top: 0.5rem;">
+            <ng-container *ngIf="form.tags && form.tags.length; else noTags">
+              <span *ngFor="let tag of form.tags; let i = index" class="badge badge-info mr-1 text-muted p-1">
+                {{tag}}
+                <button type="button" class="btn btn-xs btn-link text-danger p-0 ml-1" (click)="removeTagFromExpense(i)" title="Remove tag">&times;</button>
+              </span>
+            </ng-container>
+            <ng-template #noTags><span class="text-muted">No tags</span></ng-template>
+          </div>
+        </div>
+        <div class="form-row">
+          <button type="submit" class="btn btn-success">{{editIndex !== null ? 'Update' : 'Add'}}</button>
+          <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="expense-filters">
+    <select [(ngModel)]="filterTag" class="form-control">
+      <option value="">All Tags</option>
+      <option *ngFor="let tag of tags" [value]="tag">{{tag}}</option>
+    </select>
+    <select [(ngModel)]="filterCategory" class="form-control">
+      <option value="">All Categories</option>
+      <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+    </select>
+    <select [(ngModel)]="filterDateType" class="form-control">
+      <option value="all">All Dates</option>
+      <option value="daily">Today</option>
+      <option value="weekly">This Week</option>
+      <option value="monthly">This Month</option>
+      <option value="custom">Custom Range</option>
+    </select>
+    <input *ngIf="filterDateType==='custom'" type="date" [(ngModel)]="filterCustomStart" class="form-control">
+    <input *ngIf="filterDateType==='custom'" type="date" [(ngModel)]="filterCustomEnd" class="form-control">
+  </div>
+
+  <!-- Summary -->
+  <div class="expense-summary">
+    <span>Total: <b>{{total | currency:'INR':'symbol'}}</b></span>
+    <span>({{filteredExpenses.length}} items)</span>
+  </div>
+
+  <!-- Expenses List -->
+  <div class="expense-list">
+    <div *ngFor="let e of filteredExpenses; let i = index" class="expense-item">
+      <div class="expense-main">
+        <span class="expense-amount">{{e.amount | currency:'INR':'symbol'}}</span>
+        <span class="expense-desc">{{e.description}}</span>
+        <span class="expense-date">{{e.date}}</span>
+      </div>
+      <div class="expense-meta">
+        <span class="expense-tag">
+          <ng-container *ngIf="e.tags && e.tags.length; else noTags">
+            <span *ngFor="let tag of e.tags; let last = last">
+              #{{tag}}{{!last ? ', ' : ''}}
+            </span>
+          </ng-container>
+          <ng-template #noTags><span class="text-muted">No tags</span></ng-template>
+        </span>
+        <span class="expense-cat">[{{e.category}}]</span>
+        <button class="btn btn-sm btn-outline-primary" (click)="edit(i)">Edit</button>
+        <button class="btn btn-sm btn-outline-danger" (click)="delete(i)">Delete</button>
+      </div>
+    </div>
+    <div *ngIf="filteredExpenses.length === 0" class="expense-empty">No expenses found.</div>
+  </div>
+
+</div>

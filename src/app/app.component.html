@@ -3,8 +3,14 @@
 
 <ul ngbNav #nav="ngbNav" class="nav-tabs">
 	<bi name="app" style="color: green; width:40px;"></bi>&nbsp;&nbsp;
-	<li *ngFor="let route of routes; let i index" [ngbNavItem]="i">
+	<li *ngFor="let route of routes; let i = index" [ngbNavItem]="i">
 		<a ngbNavLink [routerLink] ="[route.label]"><b>{{route.path}}</b></a>
+	</li>
+	<li [ngbNavItem]="routes?.length || 0">
+		<a ngbNavLink routerLink="/expense"><b>Expense</b></a>
+	</li>
+	<li [ngbNavItem]="(routes?.length || 0) + 1">
+		<a ngbNavLink routerLink="/goals"><b>Goals</b></a>
 	</li>
 </ul>
 <br> 

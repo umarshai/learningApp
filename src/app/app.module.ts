@@ -11,12 +11,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AddNewComponent } from './add-new/add-new.component';
 import { CommonComponent } from './common/common.component';
+import { ExpenseComponent } from './expense/expense.component';
+import { GoalsComponent } from './goals/goals.component';
 @NgModule({
   declarations: [
     AppComponent,
     AccordionComponent,
     AddNewComponent,
-    CommonComponent
+    CommonComponent,
+    ExpenseComponent,
+    GoalsComponent
   ],
   imports: [
     BrowserModule,
