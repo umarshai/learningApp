@@ -7,6 +7,13 @@ import { ExpenseService, Expense } from './expense.service';
   styleUrls: ['./expense.component.css']
 })
 export class ExpenseComponent implements OnInit {
+  clearFilters() {
+    this.filterTag = '';
+    this.filterCategory = '';
+    this.filterDateType = 'all';
+    this.filterCustomStart = '';
+    this.filterCustomEnd = '';
+  }
   expenses: Expense[] = [];
   tags: string[] = [];
   categories: string[] = [];
