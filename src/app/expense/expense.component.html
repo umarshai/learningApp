@@ -1,10 +1,65 @@
 <div class="expense-container">
-
-  <div class="expense-header">
+  <!-- Section 1: Buttons -->
+  <div class="expense-header expense-section">
     <div>
-      <button class="btn btn-primary mr-2" (click)="startAdd()">Add Expense</button> 
-      <button class="btn btn-outline-info mx-2" (click)="openTagModal()">Tags</button> 
+      <button class="btn btn-primary mr-2" (click)="startAdd()">Add Expense</button>
+      <button class="btn btn-outline-info mx-2" (click)="openTagModal()">Tags</button>
       <button class="btn btn-outline-success" (click)="openCategoryModal()">Categories</button>
+    </div>
+  </div>
+
+  <!-- Section 2: Filters and Statistics -->
+  <div class="expense-section" style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end; margin-bottom: 1rem;">
+    <div class="expense-filters" style="flex: 2 1 300px; min-width: 220px;">
+      <select [(ngModel)]="filterTag" class="form-control">
+        <option value="">All Tags</option>
+        <option *ngFor="let tag of tags" [value]="tag">{{tag}}</option>
+      </select>
+      <select [(ngModel)]="filterCategory" class="form-control">
+        <option value="">All Categories</option>
+        <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+      </select>
+      <select [(ngModel)]="filterDateType" class="form-control">
+        <option value="all">All Dates</option>
+        <option value="daily">Today</option>
+        <option value="weekly">This Week</option>
+        <option value="monthly">This Month</option>
+        <option value="custom">Custom Range</option>
+      </select>
+      <input *ngIf="filterDateType==='custom'" type="date" [(ngModel)]="filterCustomStart" class="form-control">
+      <input *ngIf="filterDateType==='custom'" type="date" [(ngModel)]="filterCustomEnd" class="form-control">
+    </div>
+    <div class="expense-summary-card" style="flex: 1 1 180px; min-width: 160px; background: #f8f9fa; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center;">
+      <div style="font-size: 1.1em;">Total</div>
+      <div style="font-size: 1.3em; font-weight: bold; color: #28a745;">{{total | currency:'INR':'symbol'}}</div>
+      <div style="font-size: 0.95em; color: #888;">({{filteredExpenses.length}} items)</div>
+    </div>
+  </div>
+
+  <!-- Section 3: Expense List -->
+  <div class="expense-section">
+    <div class="expense-list">
+      <div *ngFor="let e of filteredExpenses; let i = index" class="expense-item">
+        <div class="expense-main">
+          <span class="expense-amount">{{e.amount | currency:'INR':'symbol'}}</span>
+          <span class="expense-desc">{{e.description}}</span>
+          <span class="expense-date">{{e.date}}</span>
+        </div>
+        <div class="expense-meta">
+          <span class="expense-tag">
+            <ng-container *ngIf="e.tags && e.tags.length; else noTags">
+              <span *ngFor="let tag of e.tags; let last = last">
+                #{{tag}}{{!last ? ', ' : ''}}
+              </span>
+            </ng-container>
+            <ng-template #noTags><span class="text-muted">No tags</span></ng-template>
+          </span>
+          <span class="expense-cat">[{{e.category}}]</span>
+          <button class="btn btn-sm btn-outline-primary" (click)="edit(i)">Edit</button>
+          <button class="btn btn-sm btn-outline-danger" (click)="delete(i)">Delete</button>
+        </div>
+      </div>
+      <div *ngIf="filteredExpenses.length === 0" class="expense-empty">No expenses found.</div>
     </div>
   </div>
 
@@ -97,57 +152,4 @@
       </form>
     </div>
   </div>
-
-  <!-- Filters -->
-  <div class="expense-filters">
-    <select [(ngModel)]="filterTag" class="form-control">
-      <option value="">All Tags</option>
-      <option *ngFor="let tag of tags" [value]="tag">{{tag}}</option>
-    </select>
-    <select [(ngModel)]="filterCategory" class="form-control">
-      <option value="">All Categories</option>
-      <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
-    </select>
-    <select [(ngModel)]="filterDateType" class="form-control">
-      <option value="all">All Dates</option>
-      <option value="daily">Today</option>
-      <option value="weekly">This Week</option>
-      <option value="monthly">This Month</option>
-      <option value="custom">Custom Range</option>
-    </select>
-    <input *ngIf="filterDateType==='custom'" type="date" [(ngModel)]="filterCustomStart" class="form-control">
-    <input *ngIf="filterDateType==='custom'" type="date" [(ngModel)]="filterCustomEnd" class="form-control">
-  </div>
-
-  <!-- Summary -->
-  <div class="expense-summary">
-    <span>Total: <b>{{total | currency:'INR':'symbol'}}</b></span>
-    <span>({{filteredExpenses.length}} items)</span>
-  </div>
-
-  <!-- Expenses List -->
-  <div class="expense-list">
-    <div *ngFor="let e of filteredExpenses; let i = index" class="expense-item">
-      <div class="expense-main">
-        <span class="expense-amount">{{e.amount | currency:'INR':'symbol'}}</span>
-        <span class="expense-desc">{{e.description}}</span>
-        <span class="expense-date">{{e.date}}</span>
-      </div>
-      <div class="expense-meta">
-        <span class="expense-tag">
-          <ng-container *ngIf="e.tags && e.tags.length; else noTags">
-            <span *ngFor="let tag of e.tags; let last = last">
-              #{{tag}}{{!last ? ', ' : ''}}
-            </span>
-          </ng-container>
-          <ng-template #noTags><span class="text-muted">No tags</span></ng-template>
-        </span>
-        <span class="expense-cat">[{{e.category}}]</span>
-        <button class="btn btn-sm btn-outline-primary" (click)="edit(i)">Edit</button>
-        <button class="btn btn-sm btn-outline-danger" (click)="delete(i)">Delete</button>
-      </div>
-    </div>
-    <div *ngIf="filteredExpenses.length === 0" class="expense-empty">No expenses found.</div>
-  </div>
-
 </div>
